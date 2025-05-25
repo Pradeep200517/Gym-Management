@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname))); // Serve files from the root dire
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "Pradeep@2005", // Your MySQL password
+  password: "", // Your MySQL password
   database: "gym_management",
   waitForConnections: true,
   connectionLimit: 10,
