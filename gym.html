@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FitLife Gym - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+      :root {
+        --primary-color: #0a3d62;
+        --secondary-color: #145a8a;
+        --accent-color: #00f5d4;
+        --dark-bg: #1e272e;
+        --light-bg: #f0f0f0;
+        --success-color: #2ecc71;
+        --warning-color: #f1c40f;
+        --danger-color: #e74c3c;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background: var(--light-bg);
+        color: #333;
+        transition: all 0.3s ease;
+      }
+
+      .dark-mode {
+        background: var(--dark-bg);
+        color: #fff;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .dark-mode .dashboard-header {
+        background: #2f3640;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+
+      .dark-mode .stat-card {
+        background: #2f3640;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        color: var(--accent-color);
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .dark-mode .stat-label {
+        color: #aaa;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .tab-button {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 50px;
+        background: white;
+        color: var(--primary-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .dark-mode .tab-button {
+        background: #2f3640;
+        color: #fff;
+      }
+
+      .tab-button:hover {
+        background: var(--accent-color);
+        color: var(--primary-color);
+        transform: translateY(-2px);
+      }
+
+      .tab-button.active {
+        background: var(--accent-color);
+        color: var(--primary-color);
+      }
+
+      .tab-content {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        transition: all 0.3s ease;
+        display: none;
+      }
+
+      .dark-mode .tab-content {
+        background: #2f3640;
+      }
+
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .progress-section {
+        margin-bottom: 30px;
+      }
+
+      .progress-bar {
+        height: 10px;
+        border-radius: 5px;
+        background: #eee;
+        overflow: hidden;
+        margin: 10px 0;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--accent-color);
+        transition: width 0.5s ease;
+      }
+
+      .payment-history {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      .payment-history th,
+      .payment-history td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+
+      .dark-mode .payment-history th,
+      .dark-mode .payment-history td {
+        border-bottom-color: #444;
+      }
+
+      .payment-history th {
+        background: #f8f9fa;
+        font-weight: 600;
+      }
+
+      .dark-mode .payment-history th {
+        background: #3d3d3d;
+      }
+
+      .workout-plan {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .workout-card {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .dark-mode .workout-card {
+        background: #3d3d3d;
+      }
+
+      .workout-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .protein-plan {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .meal-card {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .dark-mode .meal-card {
+        background: #3d3d3d;
+      }
+
+      .meal-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .meal-icon {
+        font-size: 2rem;
+        color: var(--accent-color);
+        margin-bottom: 10px;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .profile-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .profile-card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .dark-mode .profile-card {
+        background: #2f3640;
+      }
+
+      .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--accent-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-right: 20px;
+      }
+
+      .profile-info h3 {
+        margin-bottom: 5px;
+      }
+
+      .profile-info p {
+        color: #666;
+        margin: 0;
+      }
+
+      .dark-mode .profile-info p {
+        color: #aaa;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: white;
+        color: #333;
+        transition: all 0.3s ease;
+      }
+
+      .dark-mode .form-control {
+        background: #3d3d3d;
+        border-color: #444;
+        color: white;
+      }
+
+      .form-control:focus {
+        border-color: var(--accent-color);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 245, 212, 0.2);
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .btn-primary {
+        background: var(--accent-color);
+        color: var(--primary-color);
+      }
+
+      .btn-primary:hover {
+        background: #00d4b4;
+        transform: translateY(-2px);
+      }
+
+      .alert {
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      .alert-success {
+        background: var(--success-color);
+        color: white;
+      }
+
+      .alert-danger {
+        background: var(--danger-color);
+        color: white;
+      }
+
+      .attendance-calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .calendar-day {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+
+      .dark-mode .calendar-day {
+        background: #3d3d3d;
+      }
+
+      .calendar-day.present {
+        background: var(--success-color);
+        color: white;
+      }
+
+      .calendar-day.absent {
+        background: var(--danger-color);
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="dashboard-header">
+        <h2>Welcome, <span id="userName"></span> 👋</h2>
+        <div>
+          <button class="tab-button" onclick="toggleDark()">
+            <i class="fas fa-moon"></i> Toggle Mode
+          </button>
+          <button class="tab-button" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-dumbbell"></i>
+          </div>
+          <div class="stat-value" id="workoutCount">0</div>
+          <div class="stat-label">Workouts Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="stat-value" id="attendanceRate">0%</div>
+          <div class="stat-label">Attendance Rate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-weight"></i>
+          </div>
+          <div class="stat-value" id="weightProgress">0 kg</div>
+          <div class="stat-label">Weight Progress</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-fire"></i>
+          </div>
+          <div class="stat-value" id="streakDays">0</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-button active" onclick="showTab('profile')">
+          <i class="fas fa-user"></i> Profile
+        </button>
+        <button class="tab-button" onclick="showTab('workout')">
+          <i class="fas fa-dumbbell"></i> Workout
+        </button>
+        <button class="tab-button" onclick="showTab('protein')">
+          <i class="fas fa-apple-alt"></i> Nutrition
+        </button>
+        <button class="tab-button" onclick="showTab('attendance')">
+          <i class="fas fa-calendar"></i> Attendance
+        </button>
+        <button class="tab-button" onclick="showTab('payments')">
+          <i class="fas fa-credit-card"></i> Payments
+        </button>
+      </div>
+
+      <!-- Profile Tab -->
+      <div id="profile" class="tab-content active">
+        <div class="profile-section">
+          <div class="profile-card">
+            <div class="profile-header">
+              <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="profile-info">
+                <h3 id="profileName"></h3>
+                <p id="profileEmail"></p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Age</label>
+              <input type="number" class="form-control" id="profileAge">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact</label>
+              <input type="text" class="form-control" id="profileContact">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Goal</label>
+              <select class="form-control" id="profileGoal">
+                <option value="bulk">Bulk</option>
+                <option value="fit">Fitness</option>
+                <option value="loss">Weight Loss</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" onclick="updateProfile()">Update Profile</button>
+          </div>
+          <div class="profile-card">
+            <h3>Progress Tracking</h3>
+            <div class="progress-section">
+              <label>Workout Progress</label>
+              <div class="progress-bar">
+                <div class="progress-fill" id="workoutProgress" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="progress-section">
+              <label>Nutrition Adherence</label>
+              <div class="progress-bar">
+                <div class="progress-fill" id="nutritionProgress" style="width: 0%"></div>
+              </div>
+            </div>
+            <div class="progress-section">
+              <label>Attendance Rate</label>
+              <div class="progress-bar">
+                <div class="progress-fill" id="attendanceProgress" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workout Tab -->
+      <div id="workout" class="tab-content">
+        <h3>Your Workout Plan</h3>
+        <div class="workout-plan" id="workoutPlan"></div>
+        <button class="btn btn-primary" onclick="generateWorkout()">Generate New Plan</button>
+      </div>
+
+      <!-- Nutrition Tab -->
+      <div id="protein" class="tab-content">
+        <h3>Your Nutrition Plan</h3>
+        <div class="protein-plan" id="proteinPlan"></div>
+        <button class="btn btn-primary" onclick="generateProtein()">Generate New Plan</button>
+      </div>
+
+      <!-- Attendance Tab -->
+      <div id="attendance" class="tab-content">
+        <h3>Attendance Calendar</h3>
+        <div class="attendance-calendar" id="attendanceCalendar"></div>
+        <button class="btn btn-primary" onclick="markAttendance()">Mark Today's Attendance</button>
+        <div class="alert alert-success" id="attendanceAlert"></div>
+      </div>
+
+      <!-- Payments Tab -->
+      <div id="payments" class="tab-content">
+        <h3>Payment History</h3>
+        <table class="payment-history">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Method</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="paymentHistory"></tbody>
+        </table>
+        <button class="btn btn-primary" onclick="showPaymentForm()">Make Payment</button>
+        <div class="alert alert-success" id="paymentAlert"></div>
+      </div>
+    </div>
+
+    <script>
+      // Check if user is already logged in
+      document.addEventListener('DOMContentLoaded', function() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        if (member) {
+          showDashboard(member);
+        } else {
+          window.location.href = '/index.html';
+        }
+      });
+
+      function showDashboard(member) {
+        document.getElementById('userName').textContent = member.name;
+        document.getElementById('profileName').textContent = member.name;
+        document.getElementById('profileEmail').textContent = member.email;
+        document.getElementById('profileAge').value = member.age;
+        document.getElementById('profileContact').value = member.contact;
+        document.getElementById('profileGoal').value = member.goal;
+
+        // Load initial data
+        loadWorkoutPlan(member.goal);
+        loadProteinPlan(member.goal);
+        loadAttendanceHistory();
+        loadPaymentHistory();
+        updateStats();
+      }
+
+      function showTab(tabName) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(tab => {
+          tab.classList.remove('active');
+        });
+        
+        // Show selected tab
+        document.getElementById(tabName).classList.add('active');
+        
+        // Update active tab button
+        document.querySelectorAll('.tab-button').forEach(button => {
+          button.classList.remove('active');
+        });
+        event.currentTarget.classList.add('active');
+      }
+
+      function toggleDark() {
+        document.body.classList.toggle('dark-mode');
+      }
+
+      function logout() {
+        localStorage.removeItem('currentMember');
+        window.location.href = '/index.html';
+      }
+
+      function updateProfile() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        const updatedMember = {
+          ...member,
+          age: document.getElementById('profileAge').value,
+          contact: document.getElementById('profileContact').value,
+          goal: document.getElementById('profileGoal').value
+        };
+
+        // Make API call to update profile
+        fetch('http://localhost:3001/api/update-profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify(updatedMember)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Update in localStorage
+            localStorage.setItem('currentMember', JSON.stringify(updatedMember));
+
+            // Show success message
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-success';
+            alert.textContent = 'Profile updated successfully!';
+            document.querySelector('.profile-section').appendChild(alert);
+            setTimeout(() => alert.remove(), 3000);
+
+            // Reload workout and nutrition plans with new goal
+            loadWorkoutPlan(updatedMember.goal);
+            loadProteinPlan(updatedMember.goal);
+          } else {
+            throw new Error(data.message || 'Failed to update profile');
+          }
+        })
+        .catch(error => {
+          const alert = document.createElement('div');
+          alert.className = 'alert alert-danger';
+          alert.textContent = error.message || 'Failed to update profile';
+          document.querySelector('.profile-section').appendChild(alert);
+          setTimeout(() => alert.remove(), 3000);
+        });
+      }
+
+      function generateWorkout() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        
+        // Create workout plan form
+        const workoutForm = document.createElement('div');
+        workoutForm.className = 'workout-form';
+        workoutForm.innerHTML = `
+          <h4>Create Workout Plan</h4>
+          <div class="form-group">
+            <label class="form-label">Goal</label>
+            <select class="form-control" id="workoutGoal">
+              <option value="bulk">Bulk</option>
+              <option value="fit">Fitness</option>
+              <option value="loss">Weight Loss</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Exercises</label>
+            <div id="exerciseList">
+              <div class="exercise-item">
+                <input type="text" class="form-control" placeholder="Exercise Name" required>
+                <input type="text" class="form-control" placeholder="Sets (e.g., 3x12)" required>
+                <input type="text" class="form-control" placeholder="Rest Time (e.g., 60s)" required>
+                <button class="btn btn-danger btn-sm" onclick="removeExercise(this)">Remove</button>
+              </div>
+            </div>
+            <button class="btn btn-secondary" onclick="addExercise()">Add Exercise</button>
+          </div>
+          <button class="btn btn-primary" onclick="saveWorkoutPlan()">Save Plan</button>
+          <button class="btn btn-secondary" onclick="closeWorkoutForm()">Cancel</button>
+        `;
+        
+        document.getElementById('workout').appendChild(workoutForm);
+      }
+
+      function addExercise() {
+        const exerciseList = document.getElementById('exerciseList');
+        const exerciseItem = document.createElement('div');
+        exerciseItem.className = 'exercise-item';
+        exerciseItem.innerHTML = `
+          <input type="text" class="form-control" placeholder="Exercise Name" required>
+          <input type="text" class="form-control" placeholder="Sets (e.g., 3x12)" required>
+          <input type="text" class="form-control" placeholder="Rest Time (e.g., 60s)" required>
+          <button class="btn btn-danger btn-sm" onclick="removeExercise(this)">Remove</button>
+        `;
+        exerciseList.appendChild(exerciseItem);
+      }
+
+      function removeExercise(button) {
+        button.parentElement.remove();
+      }
+
+      function closeWorkoutForm() {
+        const workoutForm = document.querySelector('.workout-form');
+        if (workoutForm) {
+          workoutForm.remove();
+        }
+      }
+
+      function saveWorkoutPlan() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        const goal = document.getElementById('workoutGoal').value;
+        const exercises = [];
+        
+        document.querySelectorAll('.exercise-item').forEach(item => {
+          const inputs = item.querySelectorAll('input');
+          exercises.push({
+            name: inputs[0].value,
+            sets: inputs[1].value,
+            rest: inputs[2].value
+          });
+        });
+
+        fetch('http://localhost:3001/api/workout-plan', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+            member_id: member.id,
+            goal,
+            exercises
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            closeWorkoutForm();
+            loadWorkoutPlan(goal);
+            
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-success';
+            alert.textContent = 'Workout plan saved successfully!';
+            document.getElementById('workout').appendChild(alert);
+            setTimeout(() => alert.remove(), 3000);
+          } else {
+            throw new Error(data.message || 'Failed to save workout plan');
+          }
+        })
+        .catch(error => {
+          const alert = document.createElement('div');
+          alert.className = 'alert alert-danger';
+          alert.textContent = error.message || 'Failed to save workout plan';
+          document.getElementById('workout').appendChild(alert);
+          setTimeout(() => alert.remove(), 3000);
+        });
+      }
+
+      function generateProtein() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        
+        // Create nutrition plan form
+        const nutritionForm = document.createElement('div');
+        nutritionForm.className = 'nutrition-form';
+        nutritionForm.innerHTML = `
+          <h4>Create Nutrition Plan</h4>
+          <div class="form-group">
+            <label class="form-label">Goal</label>
+            <select class="form-control" id="nutritionGoal">
+              <option value="bulk">Bulk</option>
+              <option value="fit">Fitness</option>
+              <option value="loss">Weight Loss</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Daily Calories</label>
+            <input type="number" class="form-control" id="dailyCalories" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Protein Intake (g)</label>
+            <input type="number" class="form-control" id="proteinIntake" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Meals</label>
+            <div id="mealList">
+              <div class="meal-item">
+                <input type="text" class="form-control" placeholder="Meal Name" required>
+                <input type="text" class="form-control" placeholder="Food Items (comma-separated)" required>
+                <button class="btn btn-danger btn-sm" onclick="removeMeal(this)">Remove</button>
+              </div>
+            </div>
+            <button class="btn btn-secondary" onclick="addMeal()">Add Meal</button>
+          </div>
+          <button class="btn btn-primary" onclick="saveNutritionPlan()">Save Plan</button>
+          <button class="btn btn-secondary" onclick="closeNutritionForm()">Cancel</button>
+        `;
+        
+        document.getElementById('protein').appendChild(nutritionForm);
+      }
+
+      function addMeal() {
+        const mealList = document.getElementById('mealList');
+        const mealItem = document.createElement('div');
+        mealItem.className = 'meal-item';
+        mealItem.innerHTML = `
+          <input type="text" class="form-control" placeholder="Meal Name" required>
+          <input type="text" class="form-control" placeholder="Food Items (comma-separated)" required>
+          <button class="btn btn-danger btn-sm" onclick="removeMeal(this)">Remove</button>
+        `;
+        mealList.appendChild(mealItem);
+      }
+
+      function removeMeal(button) {
+        button.parentElement.remove();
+      }
+
+      function closeNutritionForm() {
+        const nutritionForm = document.querySelector('.nutrition-form');
+        if (nutritionForm) {
+          nutritionForm.remove();
+        }
+      }
+
+      function saveNutritionPlan() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        const goal = document.getElementById('nutritionGoal').value;
+        const dailyCalories = document.getElementById('dailyCalories').value;
+        const proteinIntake = document.getElementById('proteinIntake').value;
+        const meals = [];
+        
+        document.querySelectorAll('.meal-item').forEach(item => {
+          const inputs = item.querySelectorAll('input');
+          meals.push({
+            name: inputs[0].value,
+            items: inputs[1].value.split(',').map(item => item.trim())
+          });
+        });
+
+        fetch('http://localhost:3001/api/protein-plan', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+            member_id: member.id,
+            goal,
+            meals,
+            daily_calories: dailyCalories,
+            protein_intake: proteinIntake
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            closeNutritionForm();
+            loadProteinPlan(goal);
+            
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-success';
+            alert.textContent = 'Nutrition plan saved successfully!';
+            document.getElementById('protein').appendChild(alert);
+            setTimeout(() => alert.remove(), 3000);
+          } else {
+            throw new Error(data.message || 'Failed to save nutrition plan');
+          }
+        })
+        .catch(error => {
+          const alert = document.createElement('div');
+          alert.className = 'alert alert-danger';
+          alert.textContent = error.message || 'Failed to save nutrition plan';
+          document.getElementById('protein').appendChild(alert);
+          setTimeout(() => alert.remove(), 3000);
+        });
+      }
+
+      function showPaymentForm() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        const paymentForm = document.createElement('div');
+        paymentForm.className = 'payment-form';
+        paymentForm.innerHTML = `
+          <h4>Make Payment</h4>
+          <div class="form-group">
+            <label class="form-label">Amount (₹)</label>
+            <input type="number" class="form-control" id="paymentAmount" value="${member.months * 1000}" readonly>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Payment Method</label>
+            <select class="form-control" id="paymentMethod" onchange="togglePaymentFields()">
+              <option value="credit_card">Credit Card</option>
+              <option value="upi">UPI</option>
+              <option value="net_banking">Net Banking</option>
+            </select>
+          </div>
+          <div id="creditCardFields" style="display: none;">
+            <div class="form-group">
+              <label class="form-label">Card Number</label>
+              <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expiry Date</label>
+              <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
+            </div>
+            <div class="form-group">
+              <label class="form-label">CVV</label>
+              <input type="text" class="form-control" id="cvv" placeholder="123">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Name on Card</label>
+              <input type="text" class="form-control" id="nameOnCard" placeholder="John Doe">
+            </div>
+          </div>
+          <div id="upiFields" style="display: none;">
+            <div class="form-group">
+              <label class="form-label">UPI ID</label>
+              <input type="text" class="form-control" id="upiId" placeholder="username@upi">
+            </div>
+          </div>
+          <div id="netBankingFields" style="display: none;">
+            <div class="form-group">
+              <label class="form-label">Bank Name</label>
+              <select class="form-control" id="bankName">
+                <option value="sbi">State Bank of India</option>
+                <option value="hdfc">HDFC Bank</option>
+                <option value="icici">ICICI Bank</option>
+                <option value="axis">Axis Bank</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="processPayment()">Pay Now</button>
+          <button class="btn btn-secondary" onclick="closePaymentForm()">Cancel</button>
+        `;
+        
+        document.getElementById('payments').appendChild(paymentForm);
+      }
+
+      function togglePaymentFields() {
+        const method = document.getElementById('paymentMethod').value;
+        document.getElementById('creditCardFields').style.display = method === 'credit_card' ? 'block' : 'none';
+        document.getElementById('upiFields').style.display = method === 'upi' ? 'block' : 'none';
+        document.getElementById('netBankingFields').style.display = method === 'net_banking' ? 'block' : 'none';
+      }
+
+      function processPayment() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        const amount = document.getElementById('paymentAmount').value;
+        const method = document.getElementById('paymentMethod').value;
+        
+        let paymentData = {
+          member_id: member.id,
+          amount: parseFloat(amount),
+          payment_method: method
+        };
+
+        // Add method-specific fields
+        if (method === 'credit_card') {
+          paymentData = {
+            ...paymentData,
+            card_number: document.getElementById('cardNumber').value,
+            expiry_date: document.getElementById('expiryDate').value,
+            cvv: document.getElementById('cvv').value,
+            name_on_card: document.getElementById('nameOnCard').value
+          };
+        } else if (method === 'upi') {
+          paymentData.upi_id = document.getElementById('upiId').value;
+        } else if (method === 'net_banking') {
+          paymentData.bank_name = document.getElementById('bankName').value;
+        }
+
+        fetch('http://localhost:3001/api/payment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify(paymentData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            closePaymentForm();
+            
+            const alert = document.getElementById('paymentAlert');
+            alert.textContent = 'Payment processed successfully!';
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 3000);
+            
+            loadPaymentHistory();
+          } else {
+            throw new Error(data.message || 'Payment failed');
+          }
+        })
+        .catch(error => {
+          const alert = document.createElement('div');
+          alert.className = 'alert alert-danger';
+          alert.textContent = error.message || 'Payment failed';
+          document.getElementById('payments').appendChild(alert);
+          setTimeout(() => alert.remove(), 3000);
+        });
+      }
+
+      function loadWorkoutPlan(goal) {
+        const workoutPlan = document.getElementById('workoutPlan');
+        const plans = {
+          bulk: [
+            { name: 'Bench Press', sets: '4x8', rest: '90s' },
+            { name: 'Squats', sets: '4x10', rest: '120s' },
+            { name: 'Deadlifts', sets: '3x6', rest: '180s' }
+          ],
+          fit: [
+            { name: 'Push-ups', sets: '3x15', rest: '60s' },
+            { name: 'Pull-ups', sets: '3x10', rest: '90s' },
+            { name: 'Planks', sets: '3x60s', rest: '45s' }
+          ],
+          loss: [
+            { name: 'HIIT Circuit', sets: '3x20min', rest: '60s' },
+            { name: 'Burpees', sets: '3x15', rest: '45s' },
+            { name: 'Mountain Climbers', sets: '3x30s', rest: '30s' }
+          ]
+        };
+
+        const selectedPlan = plans[goal];
+        workoutPlan.innerHTML = selectedPlan.map(exercise => `
+          <div class="workout-card">
+            <h4>${exercise.name}</h4>
+            <p>Sets: ${exercise.sets}</p>
+            <p>Rest: ${exercise.rest}</p>
+          </div>
+        `).join('');
+      }
+
+      function loadProteinPlan(goal) {
+        const proteinPlan = document.getElementById('proteinPlan');
+        const plans = {
+          bulk: [
+            { name: 'Breakfast', items: ['Eggs', 'Oatmeal', 'Banana'] },
+            { name: 'Lunch', items: ['Chicken Breast', 'Brown Rice', 'Vegetables'] },
+            { name: 'Dinner', items: ['Salmon', 'Sweet Potato', 'Broccoli'] }
+          ],
+          fit: [
+            { name: 'Breakfast', items: ['Greek Yogurt', 'Berries', 'Nuts'] },
+            { name: 'Lunch', items: ['Tuna Salad', 'Quinoa', 'Avocado'] },
+            { name: 'Dinner', items: ['Turkey', 'Cauliflower Rice', 'Asparagus'] }
+          ],
+          loss: [
+            { name: 'Breakfast', items: ['Protein Shake', 'Apple', 'Almonds'] },
+            { name: 'Lunch', items: ['Grilled Fish', 'Mixed Salad', 'Olive Oil'] },
+            { name: 'Dinner', items: ['Lean Beef', 'Zucchini Noodles', 'Spinach'] }
+          ]
+        };
+
+        const selectedPlan = plans[goal];
+        proteinPlan.innerHTML = selectedPlan.map(meal => `
+          <div class="meal-card">
+            <div class="meal-icon">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <h4>${meal.name}</h4>
+            <ul style="list-style: none; padding: 0;">
+              ${meal.items.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('');
+      }
+
+      function loadAttendanceHistory() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        
+        fetch(`http://localhost:3001/api/attendance/${member.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const calendar = document.getElementById('attendanceCalendar');
+            const today = new Date();
+            const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+            
+            let calendarHTML = '';
+            for (let i = 1; i <= daysInMonth; i++) {
+              const date = new Date(today.getFullYear(), today.getMonth(), i);
+              const isToday = i === today.getDate();
+              const isPast = date < today;
+              
+              // Check if attendance was marked for this date
+              const attendance = data.attendance.find(a => {
+                const attendanceDate = new Date(a.date);
+                return attendanceDate.getDate() === i && 
+                       attendanceDate.getMonth() === today.getMonth() && 
+                       attendanceDate.getFullYear() === today.getFullYear();
+              });
+              
+              calendarHTML += `
+                <div class="calendar-day ${isToday ? 'present' : ''} ${isPast && !attendance ? 'absent' : ''} ${attendance ? 'present' : ''}">
+                  ${i}
+                </div>
+              `;
+            }
+            
+            calendar.innerHTML = calendarHTML;
+          } else {
+            throw new Error(data.message || 'Failed to load attendance history');
+          }
+        })
+        .catch(error => {
+          console.error('Error loading attendance history:', error);
+          const calendar = document.getElementById('attendanceCalendar');
+          calendar.innerHTML = '<div class="alert alert-danger">Failed to load attendance history</div>';
+        });
+      }
+
+      function loadPaymentHistory() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        
+        fetch(`http://localhost:3001/api/payment-history/${member.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const history = document.getElementById('paymentHistory');
+            history.innerHTML = data.payments.map(payment => `
+              <tr>
+                <td>${new Date(payment.payment_date).toLocaleDateString()}</td>
+                <td>₹${payment.amount}</td>
+                <td>${payment.payment_method}</td>
+                <td>${payment.status}</td>
+              </tr>
+            `).join('');
+          } else {
+            throw new Error(data.message || 'Failed to load payment history');
+          }
+        })
+        .catch(error => {
+          console.error('Error loading payment history:', error);
+          const history = document.getElementById('paymentHistory');
+          history.innerHTML = '<tr><td colspan="4">Failed to load payment history</td></tr>';
+        });
+      }
+
+      function updateStats() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        
+        // Fetch workout count
+        fetch(`http://localhost:3001/api/workout-count/${member.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById('workoutCount').textContent = data.count;
+            document.getElementById('workoutProgress').style.width = `${Math.min(data.count * 10, 100)}%`;
+          }
+        })
+        .catch(error => console.error('Error fetching workout count:', error));
+        
+        // Fetch attendance rate
+        fetch(`http://localhost:3001/api/attendance-rate/${member.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById('attendanceRate').textContent = `${data.rate}%`;
+            document.getElementById('attendanceProgress').style.width = `${data.rate}%`;
+          }
+        })
+        .catch(error => console.error('Error fetching attendance rate:', error));
+        
+        // Fetch weight progress
+        fetch(`http://localhost:3001/api/weight-progress/${member.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById('weightProgress').textContent = `${data.progress > 0 ? '+' : ''}${data.progress} kg`;
+          }
+        })
+        .catch(error => console.error('Error fetching weight progress:', error));
+        
+        // Fetch streak days
+        fetch(`http://localhost:3001/api/streak-days/${member.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById('streakDays').textContent = data.days;
+          }
+        })
+        .catch(error => console.error('Error fetching streak days:', error));
+        
+        // Fetch nutrition adherence
+        fetch(`http://localhost:3001/api/nutrition-adherence/${member.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById('nutritionProgress').style.width = `${data.adherence}%`;
+          }
+        })
+        .catch(error => console.error('Error fetching nutrition adherence:', error));
+      }
+
+      function markAttendance() {
+        const member = JSON.parse(localStorage.getItem('currentMember'));
+        
+        fetch('http://localhost:3001/api/attendance', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+            member_id: member.id
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const alert = document.getElementById('attendanceAlert');
+            alert.textContent = 'Attendance marked successfully!';
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 3000);
+            
+            // Update calendar
+            loadAttendanceHistory();
+            
+            // Update stats
+            updateStats();
+          } else {
+            throw new Error(data.message || 'Failed to mark attendance');
+          }
+        })
+        .catch(error => {
+          const alert = document.getElementById('attendanceAlert');
+          alert.className = 'alert alert-danger';
+          alert.textContent = error.message || 'Failed to mark attendance';
+          alert.style.display = 'block';
+          setTimeout(() => alert.style.display = 'none', 3000);
+        });
+      }
+
+      function closePaymentForm() {
+        const paymentForm = document.querySelector('.payment-form');
+        if (paymentForm) {
+          paymentForm.remove();
+        }
+      }
+    </script>
+  </body>
+</html>

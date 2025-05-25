@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitLife Gym - Welcome</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #0a3d62, #145a8a);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 800px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 1.5s ease;
+    }
+    
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    
+    .btn {
+      display: inline-block;
+      background-color: #00f5d4;
+      color: #0a3d62;
+      padding: 15px 30px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      background-color: #0a3d62;
+      color: white;
+    }
+    
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 40px 0;
+    }
+    
+    .feature {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 10px;
+      width: 200px;
+      transition: all 0.3s ease;
+    }
+    
+    .feature:hover {
+      transform: translateY(-10px);
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .feature i {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #00f5d4;
+    }
+    
+    .feature h3 {
+      margin-bottom: 10px;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .logo {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">🏋️</div>
+    <h1>Welcome to FitLife Gym</h1>
+    <p>Your journey to a healthier lifestyle starts here. Join our community of fitness enthusiasts and achieve your fitness goals with personalized workout plans, nutrition guidance, and expert support.</p>
+    
+    <div class="features">
+      <div class="feature">
+        <i>💪</i>
+        <h3>Personalized Plans</h3>
+        <p>Custom workout routines tailored to your goals</p>
+      </div>
+      <div class="feature">
+        <i>🥗</i>
+        <h3>Nutrition Guidance</h3>
+        <p>Expert advice on diet and protein intake</p>
+      </div>
+      <div class="feature">
+        <i>📊</i>
+        <h3>Progress Tracking</h3>
+        <p>Monitor your fitness journey with ease</p>
+      </div>
+    </div>
+    
+    <a href="/gym.html" class="btn">Get Started</a>
+  </div>
+  
+  <script>
+    // Add a small delay before redirecting to gym.html
+    document.addEventListener('DOMContentLoaded', function() {
+      // Uncomment the line below if you want automatic redirection
+      // setTimeout(() => window.location.href = '/gym.html', 5000);
+    });
+  </script>
+</body>
+</html> 
